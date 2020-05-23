@@ -20,7 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = NewsSplitViewController()
+        let listViewController = NewsListViewController(viewModel: NewsListViewModel())
+        let detailViewController = NewsDetailViewController()
+        window?.rootViewController = NewsSplitViewController(listViewController: listViewController, detailViewController: detailViewController)
         window?.makeKeyAndVisible()
     }
 

@@ -8,23 +8,23 @@
 
 import UIKit
 
-class NewsSplitViewController: UISplitViewController {
+final class NewsSplitViewController: UISplitViewController {
+    // MARK: - Private variables
+    // MARK: - Initializers
+    init(listViewController: NewsListViewController, detailViewController: NewsDetailViewController) {
+        super.init(nibName: nil, bundle: nil)
+        viewControllers = [listViewController, detailViewController]
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+}
 
+// MARK: - NewsSplitViewController Lifecycle
+extension NewsSplitViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         preferredDisplayMode = .allVisible
-        viewControllers = [NewsListViewController(), NewsDetailViewController()]
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

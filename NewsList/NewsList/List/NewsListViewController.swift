@@ -24,6 +24,18 @@ final class NewsListViewController: UIViewController {
         tableView.refreshControl = self.refreshControl
         return tableView
     }()
+    
+    private var viewModel: NewsListViewModelProtocol!
+    
+    // MARK: - Initializers
+    init(viewModel: NewsListViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
 }
 // MARK: - NewsListViewController Lifecycle
 extension NewsListViewController {
@@ -48,10 +60,10 @@ extension NewsListViewController {
 // MARK: - UITableViewDataSource
 extension NewsListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        viewModel.numberOfSections()
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        viewModel.numberOfRows(inSection: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
