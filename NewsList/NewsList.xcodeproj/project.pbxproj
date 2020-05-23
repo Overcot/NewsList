@@ -10,6 +10,10 @@
 		CC1583182479754800165E03 /* NewsSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1583172479754800165E03 /* NewsSplitViewController.swift */; };
 		CC15831B247975BB00165E03 /* NewsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC15831A247975BB00165E03 /* NewsDetailViewController.swift */; };
 		CC15831D2479777100165E03 /* NewsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC15831C2479777100165E03 /* NewsListViewModel.swift */; };
+		CC15831F24797A9000165E03 /* NewsFetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC15831E24797A9000165E03 /* NewsFetchService.swift */; };
+		CC15832224797AD000165E03 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CC15832124797AD000165E03 /* Alamofire */; };
+		CC15832524797E6800165E03 /* SwiftyXMLParser in Frameworks */ = {isa = PBXBuildFile; productRef = CC15832424797E6800165E03 /* SwiftyXMLParser */; };
+		CC15832724798EBF00165E03 /* Collection+NewsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC15832624798EBF00165E03 /* Collection+NewsList.swift */; };
 		CC1A119A24783C810057E71D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A119924783C810057E71D /* AppDelegate.swift */; };
 		CC1A119C24783C810057E71D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A119B24783C810057E71D /* SceneDelegate.swift */; };
 		CC1A119E24783C810057E71D /* NewsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A119D24783C810057E71D /* NewsListViewController.swift */; };
@@ -43,6 +47,8 @@
 		CC1583172479754800165E03 /* NewsSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsSplitViewController.swift; sourceTree = "<group>"; };
 		CC15831A247975BB00165E03 /* NewsDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDetailViewController.swift; sourceTree = "<group>"; };
 		CC15831C2479777100165E03 /* NewsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListViewModel.swift; sourceTree = "<group>"; };
+		CC15831E24797A9000165E03 /* NewsFetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFetchService.swift; sourceTree = "<group>"; };
+		CC15832624798EBF00165E03 /* Collection+NewsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+NewsList.swift"; sourceTree = "<group>"; };
 		CC1A119624783C810057E71D /* NewsList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC1A119924783C810057E71D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CC1A119B24783C810057E71D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +72,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC1A11CE2478ED170057E71D /* SnapKit in Frameworks */,
+				CC15832524797E6800165E03 /* SwiftyXMLParser in Frameworks */,
+				CC15832224797AD000165E03 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +140,8 @@
 				CC158319247975A800165E03 /* Detail */,
 				CC1A11D02478ED630057E71D /* Resources */,
 				CC1A11A224783C810057E71D /* NewsList.xcdatamodeld */,
+				CC15831E24797A9000165E03 /* NewsFetchService.swift */,
+				CC15832624798EBF00165E03 /* Collection+NewsList.swift */,
 			);
 			path = NewsList;
 			sourceTree = "<group>";
@@ -200,6 +210,8 @@
 			name = NewsList;
 			packageProductDependencies = (
 				CC1A11CD2478ED170057E71D /* SnapKit */,
+				CC15832124797AD000165E03 /* Alamofire */,
+				CC15832424797E6800165E03 /* SwiftyXMLParser */,
 			);
 			productName = NewsList;
 			productReference = CC1A119624783C810057E71D /* NewsList.app */;
@@ -275,6 +287,8 @@
 			mainGroup = CC1A118D24783C810057E71D;
 			packageReferences = (
 				CC1A11CC2478ED170057E71D /* XCRemoteSwiftPackageReference "SnapKit" */,
+				CC15832024797AD000165E03 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				CC15832324797E6800165E03 /* XCRemoteSwiftPackageReference "SwiftyXMLParser" */,
 			);
 			productRefGroup = CC1A119724783C810057E71D /* Products */;
 			projectDirPath = "";
@@ -318,7 +332,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC15831F24797A9000165E03 /* NewsFetchService.swift in Sources */,
 				CC1583182479754800165E03 /* NewsSplitViewController.swift in Sources */,
+				CC15832724798EBF00165E03 /* Collection+NewsList.swift in Sources */,
 				CC1A119E24783C810057E71D /* NewsListViewController.swift in Sources */,
 				CC1A11D32478EDC70057E71D /* NewsListCell.swift in Sources */,
 				CC15831B247975BB00165E03 /* NewsDetailViewController.swift in Sources */,
@@ -648,6 +664,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		CC15832024797AD000165E03 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.0;
+			};
+		};
+		CC15832324797E6800165E03 /* XCRemoteSwiftPackageReference "SwiftyXMLParser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/yahoojapan/SwiftyXMLParser";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.0;
+			};
+		};
 		CC1A11CC2478ED170057E71D /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -659,6 +691,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		CC15832124797AD000165E03 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC15832024797AD000165E03 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		CC15832424797E6800165E03 /* SwiftyXMLParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC15832324797E6800165E03 /* XCRemoteSwiftPackageReference "SwiftyXMLParser" */;
+			productName = SwiftyXMLParser;
+		};
 		CC1A11CD2478ED170057E71D /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CC1A11CC2478ED170057E71D /* XCRemoteSwiftPackageReference "SnapKit" */;

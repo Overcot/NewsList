@@ -9,12 +9,39 @@
 import Foundation
 
 protocol NewsListViewModelProtocol {
+    
+    var didUpdateNewsList: (() -> Void)? { get set }
+    
     func numberOfSections() -> Int
     func numberOfRows(inSection section: Int) -> Int
+    func item(forIndexPath indexPath: IndexPath) -> NewsListItem?
 }
 
 final class NewsListViewModel {
+    // MARK: - Private variables
+    private let newsFetchService: NewsFetchServiceProtocol
     
+    private var list: [NewsListItem] = [] {
+        didSet {
+            didUpdateNewsList?()
+        }
+    }
+        
+    var didUpdateNewsList: (() -> Void)?
+    
+    // MARK: - Initializers
+    init(newsFetchService: NewsFetchServiceProtocol) {
+        self.newsFetchService = newsFetchService
+        newsFetchService.getSortedNewsList(from: "https://www.banki.ru/xml/news.rss") { [weak self] result in
+            switch result {
+            case let .success(newsList):
+                self?.list = newsList
+                
+            case .failure:
+                break
+            }
+        }
+    }
 }
 
 // MARK: - Protocol Conformance
@@ -25,6 +52,9 @@ extension NewsListViewModel: NewsListViewModelProtocol {
     }
     
     func numberOfRows(inSection section: Int) -> Int {
-        3
+        list.count
+    }
+    func item(forIndexPath indexPath: IndexPath) -> NewsListItem? {
+        list[safe: indexPath.row]
     }
 }

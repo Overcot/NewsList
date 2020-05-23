@@ -20,6 +20,7 @@ final class NewsListViewController: UIViewController {
         let tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.register(NewsListCell.self, forCellReuseIdentifier: "com.overcot.NewsList.NewsListCell")
         tableView.refreshControl = self.refreshControl
         return tableView
@@ -41,6 +42,7 @@ final class NewsListViewController: UIViewController {
 extension NewsListViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViewModel()
         setupSubviews()
     }
 }
@@ -50,7 +52,12 @@ extension NewsListViewController {
     private func setupSubviews() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+    private func setupViewModel() {
+        viewModel.didUpdateNewsList = { [unowned self] in
+            self.tableView.reloadData()
         }
     }
 }
@@ -62,6 +69,7 @@ extension NewsListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         viewModel.numberOfSections()
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.numberOfRows(inSection: section)
     }
@@ -69,6 +77,9 @@ extension NewsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "com.overcot.NewsList.NewsListCell") else {
             return UITableViewCell()
+        }
+        if let cell = cell as? NewsListCell {
+            cell.item = viewModel.item(forIndexPath: indexPath)
         }
         return cell
     }
