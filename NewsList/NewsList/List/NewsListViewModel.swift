@@ -9,12 +9,14 @@
 import Foundation
 
 protocol NewsListViewModelProtocol {
-    
+    var title: String { get }
     var didUpdateNewsList: (() -> Void)? { get set }
     
     func numberOfSections() -> Int
     func numberOfRows(inSection section: Int) -> Int
     func item(forIndexPath indexPath: IndexPath) -> NewsListItem?
+    
+    func refreshNewsList()
 }
 
 final class NewsListViewModel {
@@ -32,21 +34,16 @@ final class NewsListViewModel {
     // MARK: - Initializers
     init(newsFetchService: NewsFetchServiceProtocol) {
         self.newsFetchService = newsFetchService
-        newsFetchService.getSortedNewsList(from: "https://www.banki.ru/xml/news.rss") { [weak self] result in
-            switch result {
-            case let .success(newsList):
-                self?.list = newsList
-                
-            case .failure:
-                break
-            }
-        }
+        refreshNewsList()
     }
 }
 
 // MARK: - Protocol Conformance
 // MARK: - NewsListViewModelProtocol
 extension NewsListViewModel: NewsListViewModelProtocol {
+    var title: String {
+        "Новости"
+    }
     func numberOfSections() -> Int {
         1
     }
@@ -56,5 +53,17 @@ extension NewsListViewModel: NewsListViewModelProtocol {
     }
     func item(forIndexPath indexPath: IndexPath) -> NewsListItem? {
         list[safe: indexPath.row]
+    }
+    
+    func refreshNewsList() {
+        newsFetchService.getSortedNewsList(from: "https://www.banki.ru/xml/news.rss") { [weak self] result in
+            switch result {
+            case let .success(newsList):
+                self?.list = newsList
+                
+            case .failure:
+                break
+            }
+        }
     }
 }

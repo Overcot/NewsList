@@ -13,6 +13,8 @@ final class NewsListViewController: UIViewController {
     // MARK: - Private Variables
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshNewsList), for: .valueChanged)
+        refreshControl.attributedTitle = NSAttributedString(string: "Обновите список новостей")
         return refreshControl
     }()
 
@@ -56,9 +58,18 @@ extension NewsListViewController {
         }
     }
     private func setupViewModel() {
+        title = viewModel.title
         viewModel.didUpdateNewsList = { [unowned self] in
             self.tableView.reloadData()
+            if self.refreshControl.isRefreshing {
+                self.refreshControl.endRefreshing()
+            }
         }
+    }
+    
+    @objc
+    private func refreshNewsList() {
+        viewModel.refreshNewsList()
     }
 }
 
@@ -86,5 +97,5 @@ extension NewsListViewController: UITableViewDataSource {
 }
 // MARK: - UITableViewDelegate
 extension NewsListViewController: UITableViewDelegate {
-    
+
 }
