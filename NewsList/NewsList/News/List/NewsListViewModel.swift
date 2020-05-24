@@ -28,7 +28,9 @@ final class NewsListViewModel {
     
     private var list: [NewsItem] = [] {
         didSet {
-            didUpdateNewsList?()
+            DispatchQueue.main.async { [weak self] in
+                self?.didUpdateNewsList?()
+            }
         }
     }
     var link: String = "https://www.banki.ru/xml/news.rss" {
