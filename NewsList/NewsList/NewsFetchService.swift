@@ -9,6 +9,7 @@
 import Alamofire
 import Foundation
 import SwiftyXMLParser
+import SwiftSoup
 
 struct NewsItem {
     let title: String
@@ -53,6 +54,9 @@ extension NewsFetchService: NewsFetchServiceProtocol {
                 guard let description = element.childElements.first(where: { $0.name == "description"})?.text else {
                     return nil
                 }
+                guard let parsedDescription = try? SwiftSoup.parseBodyFragment(description).text() else {
+                    return nil
+                }
                 guard let dateString = element.childElements.first(where: { $0.name == "pubDate" })?.text else {
                     return nil
                 }
@@ -61,7 +65,7 @@ extension NewsFetchService: NewsFetchServiceProtocol {
                 guard let date = dateFormatter.date(from: dateString) else {
                     return nil
                 }
-                return NewsItem(title: title, description: description, publicationDate: date)
+                return NewsItem(title: title, description: parsedDescription, publicationDate: date)
             }
             completion(.success(news))
         }
