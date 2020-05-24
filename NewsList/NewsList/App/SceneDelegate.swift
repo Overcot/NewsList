@@ -11,7 +11,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    var newsViewCoordinator: NewsViewCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -20,10 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        let listViewController = NewsListViewController(viewModel: NewsListViewModel(newsFetchService: NewsFetchService()))
-        let detailViewController = NewsDetailViewController()
-        window?.rootViewController = NewsSplitViewController(listViewController: listViewController, detailViewController: detailViewController)
         window?.makeKeyAndVisible()
+        newsViewCoordinator = NewsViewCoordinator(window: window)
+        newsViewCoordinator?.start { }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

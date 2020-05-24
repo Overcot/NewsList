@@ -12,28 +12,37 @@ protocol NewsListViewModelProtocol {
     var title: String { get }
     var didUpdateNewsList: (() -> Void)? { get set }
     
+    var showError: ((String, String) -> Void)? { get set }
+    
     func numberOfSections() -> Int
     func numberOfRows(inSection section: Int) -> Int
     func item(forIndexPath indexPath: IndexPath) -> NewsListItem?
-    
+    func didSelectRowAt(indexPath: IndexPath)
     func refreshNewsList()
 }
 
 final class NewsListViewModel {
     // MARK: - Private variables
     private let newsFetchService: NewsFetchServiceProtocol
+    private weak var coordinator: NewsViewCoordinator?
     
     private var list: [NewsListItem] = [] {
         didSet {
             didUpdateNewsList?()
         }
     }
-        
+    var link: String = "https://www.banki.ru/xml/news.rss" {
+        didSet {
+            refreshNewsList()
+        }
+    }
     var didUpdateNewsList: (() -> Void)?
+    var showError: ((String, String) -> Void)?
     
     // MARK: - Initializers
-    init(newsFetchService: NewsFetchServiceProtocol) {
+    init(newsFetchService: NewsFetchServiceProtocol, coordinator: NewsViewCoordinator?) {
         self.newsFetchService = newsFetchService
+        self.coordinator = coordinator
         refreshNewsList()
     }
 }
@@ -55,14 +64,18 @@ extension NewsListViewModel: NewsListViewModelProtocol {
         list[safe: indexPath.row]
     }
     
+    func didSelectRowAt(indexPath: IndexPath) {
+        coordinator?.select(item: list[safe: indexPath.row])
+    }
+    
     func refreshNewsList() {
-        newsFetchService.getSortedNewsList(from: "https://www.banki.ru/xml/news.rss") { [weak self] result in
+        newsFetchService.getSortedNewsList(from: link) { [weak self] result in
             switch result {
             case let .success(newsList):
                 self?.list = newsList
                 
             case .failure:
-                break
+                self?.showError?("asd", "test")
             }
         }
     }

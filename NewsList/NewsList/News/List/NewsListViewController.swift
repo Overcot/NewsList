@@ -65,6 +65,14 @@ extension NewsListViewController {
                 self.refreshControl.endRefreshing()
             }
         }
+        viewModel.showError = { [unowned self] (title: String, message: String) in
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let closeAction = UIAlertAction(title: "ОК", style: .default) { [weak self] _ in
+                self?.dismiss(animated: true, completion: nil)
+            }
+            alert.addAction(closeAction)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc
@@ -97,5 +105,7 @@ extension NewsListViewController: UITableViewDataSource {
 }
 // MARK: - UITableViewDelegate
 extension NewsListViewController: UITableViewDelegate {
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.didSelectRowAt(indexPath: indexPath)
+    }
 }

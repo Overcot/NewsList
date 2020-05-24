@@ -11,7 +11,8 @@ import UIKit
 final class NewsSplitViewController: UISplitViewController {
     // MARK: - Private variables
     // MARK: - Initializers
-    init(listViewController: NewsListViewController, detailViewController: NewsDetailViewController) {
+    init(listViewController: UIViewController,
+         detailViewController: UIViewController) {
         super.init(nibName: nil, bundle: nil)
         viewControllers = [listViewController, detailViewController]
     }
