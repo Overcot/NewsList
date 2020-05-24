@@ -60,8 +60,7 @@ extension NewsFetchService: NewsFetchServiceProtocol {
                 guard let dateString = element.childElements.first(where: { $0.name == "pubDate" })?.text else {
                     return nil
                 }
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "E, dd MMM yyyy H:mm:ss Z"
+                let dateFormatter = DateFormatter.defaultFormatter
                 guard let date = dateFormatter.date(from: dateString) else {
                     return nil
                 }

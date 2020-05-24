@@ -28,8 +28,7 @@ final class NewsListCell: UITableViewCell {
                 titleLabel.text = ""
                 return
             }
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "E, dd MMM yyyy H:mm:ss Z"
+            let dateFormatter = DateFormatter.defaultFormatter
             timeLabel.text = dateFormatter.string(from: item.publicationDate)
             titleLabel.text = item.title
         }

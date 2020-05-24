@@ -26,8 +26,7 @@ final class NewsDetailViewModel {
 // MARK: - NewsDetailViewModelProtocol
 extension NewsDetailViewModel: NewsDetailViewModelProtocol {
     var viewControllerTitle: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E, dd MMM yyyy H:mm:ss Z"
+        let dateFormatter = DateFormatter.defaultFormatter
         return dateFormatter.string(from: model.publicationDate)
     }
     var title: String {
