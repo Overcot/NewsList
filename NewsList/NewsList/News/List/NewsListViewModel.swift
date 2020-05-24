@@ -16,7 +16,7 @@ protocol NewsListViewModelProtocol {
     
     func numberOfSections() -> Int
     func numberOfRows(inSection section: Int) -> Int
-    func item(forIndexPath indexPath: IndexPath) -> NewsListItem?
+    func item(forIndexPath indexPath: IndexPath) -> NewsItem?
     func didSelectRowAt(indexPath: IndexPath)
     func refreshNewsList()
 }
@@ -26,7 +26,7 @@ final class NewsListViewModel {
     private let newsFetchService: NewsFetchServiceProtocol
     private weak var coordinator: NewsViewCoordinator?
     
-    private var list: [NewsListItem] = [] {
+    private var list: [NewsItem] = [] {
         didSet {
             didUpdateNewsList?()
         }
@@ -60,7 +60,7 @@ extension NewsListViewModel: NewsListViewModelProtocol {
     func numberOfRows(inSection section: Int) -> Int {
         list.count
     }
-    func item(forIndexPath indexPath: IndexPath) -> NewsListItem? {
+    func item(forIndexPath indexPath: IndexPath) -> NewsItem? {
         list[safe: indexPath.row]
     }
     

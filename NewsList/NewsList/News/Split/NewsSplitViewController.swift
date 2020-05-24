@@ -15,6 +15,7 @@ final class NewsSplitViewController: UISplitViewController {
          detailViewController: UIViewController) {
         super.init(nibName: nil, bundle: nil)
         viewControllers = [listViewController, detailViewController]
+        delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -27,5 +28,17 @@ extension NewsSplitViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         preferredDisplayMode = .allVisible
+        view.backgroundColor = .systemBackground
+    }
+}
+// MARK: - Protocol Conformance
+// MARK: - UISplitViewControllerDelegate
+extension NewsSplitViewController: UISplitViewControllerDelegate {
+    func splitViewController(
+             _ splitViewController: UISplitViewController,
+             collapseSecondary secondaryViewController: UIViewController,
+             onto primaryViewController: UIViewController) -> Bool {
+        // Return true to prevent UIKit from applying its default behavior
+        return true
     }
 }

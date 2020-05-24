@@ -16,11 +16,14 @@ final class NewsViewCoordinator: BaseCoordinator<Void> {
     init(window: UIWindow?) {
         self.window = window
     }
+    
     override func start(completion: @escaping ((Void) -> Void)) {
         let viewModel = NewsListViewModel(newsFetchService: NewsFetchService(), coordinator: self)
         let listViewController = NewsListViewController(viewModel: viewModel)
+        let masterNavigationController = UINavigationController(rootViewController: listViewController)
+        masterNavigationController.navigationBar.prefersLargeTitles = true
         splitViewController = NewsSplitViewController(
-            listViewController: UINavigationController(rootViewController: listViewController),
+            listViewController: masterNavigationController,
             detailViewController: UINavigationController(rootViewController: PlaceholderViewController())
         )
         window?.rootViewController = splitViewController
@@ -32,7 +35,14 @@ final class NewsViewCoordinator: BaseCoordinator<Void> {
             viewModel?.link = str
         }
     }
-    func select(item: NewsListItem?) {
-        splitViewController?.showDetailViewController(UINavigationController(rootViewController: NewsDetailViewController()), sender: nil)
+    func select(item: NewsItem?) {
+        guard let item = item else {
+            return
+        }
+        let detailViewModel = NewsDetailViewModel(model: item)
+        splitViewController?.showDetailViewController(
+            UINavigationController(rootViewController: NewsDetailViewController(viewModel: detailViewModel)),
+            sender: nil
+        )
     }
 }

@@ -21,7 +21,7 @@ final class NewsListCell: UITableViewCell {
         return label
     }()
     
-    var item: NewsListItem? {
+    var item: NewsItem? {
         didSet {
             guard let item = item else {
                 timeLabel.text = ""

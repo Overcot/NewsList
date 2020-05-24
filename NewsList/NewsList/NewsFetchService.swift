@@ -10,8 +10,9 @@ import Alamofire
 import Foundation
 import SwiftyXMLParser
 
-struct NewsListItem {
+struct NewsItem {
     let title: String
+    let description: String
     let publicationDate: Date
 }
 
@@ -22,7 +23,7 @@ enum NewsFetchServiceError: Error {
 }
 
 protocol NewsFetchServiceProtocol {
-    func getSortedNewsList(from address: String, completion: @escaping((Result<[NewsListItem], NewsFetchServiceError>) -> Void))
+    func getSortedNewsList(from address: String, completion: @escaping((Result<[NewsItem], NewsFetchServiceError>) -> Void))
 }
 
 final class NewsFetchService {
@@ -30,7 +31,7 @@ final class NewsFetchService {
 }
 
 extension NewsFetchService: NewsFetchServiceProtocol {
-    func getSortedNewsList(from address: String, completion: @escaping((Result<[NewsListItem], NewsFetchServiceError>) -> Void)) {
+    func getSortedNewsList(from address: String, completion: @escaping((Result<[NewsItem], NewsFetchServiceError>) -> Void)) {
         AF.request(address).response { response in
             guard let data = response.data else {
                 return completion(.failure(.noData))
@@ -45,8 +46,11 @@ extension NewsFetchService: NewsFetchServiceProtocol {
                 return completion(.failure(.invalidXML))
             }
             let items = channel.childElements.filter { $0.name == "item" }
-            let news = items.compactMap { (element) -> NewsListItem? in
+            let news = items.compactMap { (element) -> NewsItem? in
                 guard let title = element.childElements.first(where: { $0.name == "title" })?.text else {
+                    return nil
+                }
+                guard let description = element.childElements.first(where: { $0.name == "description"})?.text else {
                     return nil
                 }
                 guard let dateString = element.childElements.first(where: { $0.name == "pubDate" })?.text else {
@@ -57,7 +61,7 @@ extension NewsFetchService: NewsFetchServiceProtocol {
                 guard let date = dateFormatter.date(from: dateString) else {
                     return nil
                 }
-                return NewsListItem(title: title, publicationDate: date)
+                return NewsItem(title: title, description: description, publicationDate: date)
             }
             completion(.success(news))
         }
