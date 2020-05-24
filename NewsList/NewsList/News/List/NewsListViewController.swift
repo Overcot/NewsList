@@ -47,6 +47,12 @@ extension NewsListViewController {
         setupViewModel()
         setupSubviews()
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let indexPath = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
 }
 
 // MARK: - Private Functions
@@ -107,6 +113,5 @@ extension NewsListViewController: UITableViewDataSource {
 extension NewsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.didSelectRowAt(indexPath: indexPath)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
