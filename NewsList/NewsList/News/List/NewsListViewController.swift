@@ -47,6 +47,7 @@ extension NewsListViewController {
         setupViewModel()
         setupSubviews()
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let indexPath = tableView.indexPathForSelectedRow {
@@ -69,6 +70,11 @@ extension NewsListViewController {
             self.tableView.reloadData()
             if self.refreshControl.isRefreshing {
                 self.refreshControl.endRefreshing()
+            }
+        }
+        viewModel.didMarkNewsAsReadedAt = { [unowned self] indexPath in
+            if let newsListCell = self.tableView.cellForRow(at: indexPath) as? NewsListCell {
+                newsListCell.item = self.viewModel.item(forIndexPath: indexPath)
             }
         }
         viewModel.showError = { [unowned self] (title: String, message: String) in

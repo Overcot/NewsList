@@ -31,6 +31,9 @@ final class NewsListCell: UITableViewCell {
             let dateFormatter = DateFormatter.defaultFormatter
             timeLabel.text = dateFormatter.string(from: item.publicationDate)
             titleLabel.text = item.title
+            let textColor: UIColor = (item.isReaded) ? .secondaryLabel : .label
+            timeLabel.textColor = textColor
+            titleLabel.textColor = textColor
         }
     }
     

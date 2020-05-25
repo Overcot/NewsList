@@ -11,7 +11,7 @@ import Foundation
 protocol NewsListViewModelProtocol {
     var title: String { get }
     var didUpdateNewsList: (() -> Void)? { get set }
-    
+    var didMarkNewsAsReadedAt: ((IndexPath) -> Void)? { get set }
     var showError: ((String, String) -> Void)? { get set }
     
     func numberOfSections() -> Int
@@ -23,29 +23,38 @@ protocol NewsListViewModelProtocol {
 
 final class NewsListViewModel {
     // MARK: - Private variables
-    private let newsFetchService: NewsFetchServiceProtocol
+    private let newsFetchService: NewsServiceProtocol
     private weak var coordinator: NewsViewCoordinator?
     
-    private var list: [NewsItem] = [] {
-        didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.didUpdateNewsList?()
-            }
-        }
-    }
+    private var list: [NewsItem] = []
     var link: String = "https://www.banki.ru/xml/news.rss" {
         didSet {
             refreshNewsList()
         }
     }
     var didUpdateNewsList: (() -> Void)?
+    var didMarkNewsAsReadedAt: ((IndexPath) -> Void)?
     var showError: ((String, String) -> Void)?
     
     // MARK: - Initializers
-    init(newsFetchService: NewsFetchServiceProtocol, coordinator: NewsViewCoordinator?) {
+    init(newsFetchService: NewsServiceProtocol, coordinator: NewsViewCoordinator?) {
         self.newsFetchService = newsFetchService
         self.coordinator = coordinator
         refreshNewsList()
+    }
+}
+
+// MARK: - Private Functions
+extension NewsListViewModel {
+    private func updateView() {
+        DispatchQueue.main.async { [weak self] in
+            self?.didUpdateNewsList?()
+        }
+    }
+    private func updateCell(at indexPath: IndexPath) {
+        DispatchQueue.main.async { [weak self] in
+            self?.didMarkNewsAsReadedAt?(indexPath)
+        }
     }
 }
 
@@ -67,7 +76,13 @@ extension NewsListViewModel: NewsListViewModelProtocol {
     }
     
     func didSelectRowAt(indexPath: IndexPath) {
-        coordinator?.select(item: list[safe: indexPath.row])
+        guard let item = list[safe: indexPath.row] else {
+            return
+        }
+        list[indexPath.row].isReaded = true
+        updateCell(at: indexPath)
+        coordinator?.select(item: item)
+        newsFetchService.markNewsAsReaded(item)
     }
     
     func refreshNewsList() {
@@ -75,9 +90,12 @@ extension NewsListViewModel: NewsListViewModelProtocol {
             switch result {
             case let .success(newsList):
                 self?.list = newsList
+                self?.updateView()
                 
             case .failure:
-                self?.showError?("asd", "test")
+                DispatchQueue.main.async { [weak self] in
+                    self?.showError?("Ошибка", "Произошла ошибка при загрузке новостей")
+                }
             }
         }
     }

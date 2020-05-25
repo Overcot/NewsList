@@ -18,7 +18,7 @@ final class NewsViewCoordinator: BaseCoordinator<Void> {
     }
     
     override func start(completion: @escaping ((Void) -> Void)) {
-        let viewModel = NewsListViewModel(newsFetchService: NewsFetchService(), coordinator: self)
+        let viewModel = NewsListViewModel(newsFetchService: NewsService(), coordinator: self)
         let listViewController = NewsListViewController(viewModel: viewModel)
         let masterNavigationController = UINavigationController(rootViewController: listViewController)
         masterNavigationController.navigationBar.prefersLargeTitles = true
