@@ -23,11 +23,11 @@ protocol NewsListViewModelProtocol {
 
 final class NewsListViewModel {
     // MARK: - Private variables
-    private let newsFetchService: NewsServiceProtocol
+    private let newsService: NewsServiceProtocol
     private weak var coordinator: NewsViewCoordinator?
     
     private var list: [NewsItem] = []
-    var link: String = "https://www.banki.ru/xml/news.rss" {
+    var link: String = "" {
         didSet {
             refreshNewsList()
         }
@@ -37,8 +37,8 @@ final class NewsListViewModel {
     var showError: ((String, String) -> Void)?
     
     // MARK: - Initializers
-    init(newsFetchService: NewsServiceProtocol, coordinator: NewsViewCoordinator?) {
-        self.newsFetchService = newsFetchService
+    init(newsService: NewsServiceProtocol, coordinator: NewsViewCoordinator?) {
+        self.newsService = newsService
         self.coordinator = coordinator
         refreshNewsList()
     }
@@ -79,11 +79,11 @@ extension NewsListViewModel: NewsListViewModelProtocol {
         list[indexPath.row].isReaded = true
         updateCell(at: indexPath)
         coordinator?.select(item: item)
-        newsFetchService.markNewsAsReaded(item)
+        newsService.markNewsAsReaded(item)
     }
     
     func refreshNewsList() {
-        newsFetchService.getSortedNewsList(from: link) { [weak self] result in
+        newsService.getSortedNewsList(from: link) { [weak self] result in
             switch result {
             case let .success(newsList):
                 self?.list = newsList

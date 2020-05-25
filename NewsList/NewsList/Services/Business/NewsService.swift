@@ -88,6 +88,9 @@ extension NewsService {
 // MARK: - NewsServiceProtocol
 extension NewsService: NewsServiceProtocol {
     func getSortedNewsList(from address: String, completion: @escaping ((Result<[NewsItem], NewsFetchServiceError>) -> Void)) {
+        guard address.count > 0 else {
+            return completion(.success([]))
+        }
         AF.request(address).response { [weak self] response in
             guard let self = self else {
                 return
