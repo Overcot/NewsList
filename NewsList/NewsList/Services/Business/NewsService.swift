@@ -30,26 +30,13 @@ protocol NewsServiceProtocol {
 }
 
 final class NewsService {
-    private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "NewsList")
-        container.loadPersistentStores { (storeDescription, error) in
-            if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                 
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        }
-        return container
-    }()
+    // MARK: - Private variables
+    private let coreDataService: CoreDataServiceProtocol
+    
+    // MARK: - Initializers
+    init(coreDataService: CoreDataServiceProtocol) {
+        self.coreDataService = coreDataService
+    }
 }
 
 // MARK: - Private Functions
@@ -109,7 +96,7 @@ extension NewsService: NewsServiceProtocol {
             switch xmlItemsResult {
             case let .success(items):
                 let newsItemsFromXML = self.parse(xmlItems: items)
-                self.persistentContainer.performBackgroundTask { context in
+                self.coreDataService.performBackgroundTask { context in
                     newsItemsFromXML.forEach {
                         let fetchRequest = NSFetchRequest<News>(entityName: "News")
                         fetchRequest.predicate = NSPredicate(format: "link == %@", $0.link)
@@ -153,7 +140,7 @@ extension NewsService: NewsServiceProtocol {
     }
     
     func markNewsAsReaded(_ news: NewsItem) {
-        self.persistentContainer.performBackgroundTask { context in
+        self.coreDataService.performBackgroundTask { context in
             let fetchRequest = NSFetchRequest<News>(entityName: "News")
             fetchRequest.predicate = NSPredicate(format: "link == %@", news.link)
             guard let result = try? context.fetch(fetchRequest), result.count == 1, let news = result.first else {

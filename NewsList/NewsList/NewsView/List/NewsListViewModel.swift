@@ -14,11 +14,11 @@ protocol NewsListViewModelProtocol {
     var didMarkNewsAsReadedAt: ((IndexPath) -> Void)? { get set }
     var showError: ((String, String) -> Void)? { get set }
     
-    func numberOfSections() -> Int
-    func numberOfRows(inSection section: Int) -> Int
+    func numberOfRows() -> Int
     func item(forIndexPath indexPath: IndexPath) -> NewsItem?
     func didSelectRowAt(indexPath: IndexPath)
     func refreshNewsList()
+    func selectNewsSource()
 }
 
 final class NewsListViewModel {
@@ -64,11 +64,8 @@ extension NewsListViewModel: NewsListViewModelProtocol {
     var title: String {
         "Новости"
     }
-    func numberOfSections() -> Int {
-        1
-    }
     
-    func numberOfRows(inSection section: Int) -> Int {
+    func numberOfRows() -> Int {
         list.count
     }
     func item(forIndexPath indexPath: IndexPath) -> NewsItem? {
@@ -98,5 +95,8 @@ extension NewsListViewModel: NewsListViewModelProtocol {
                 }
             }
         }
+    }
+    func selectNewsSource() {
+        coordinator?.selectNewsSource()
     }
 }

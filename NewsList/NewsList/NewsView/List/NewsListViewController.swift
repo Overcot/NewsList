@@ -46,6 +46,7 @@ extension NewsListViewController {
         super.viewDidLoad()
         setupViewModel()
         setupSubviews()
+        setupNavigationBar()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -87,22 +88,27 @@ extension NewsListViewController {
         }
     }
     
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(selectNewsSource))
+    }
+    
     @objc
     private func refreshNewsList() {
         viewModel.refreshNewsList()
+    }
+    
+    @objc
+    private func selectNewsSource() {
+        viewModel.selectNewsSource()
     }
 }
 
 
 // MARK: - Protocol Conformance
 // MARK: - UITableViewDataSource
-extension NewsListViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        viewModel.numberOfSections()
-    }
-    
+extension NewsListViewController: UITableViewDataSource {    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.numberOfRows(inSection: section)
+        viewModel.numberOfRows()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

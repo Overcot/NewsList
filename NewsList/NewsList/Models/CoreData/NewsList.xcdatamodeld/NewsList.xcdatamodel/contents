@@ -7,7 +7,12 @@
         <attribute name="pubDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
     </entity>
+    <entity name="Source" representedClassName="Source" syncable="YES" codeGenerationType="category">
+        <attribute name="isSelected" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="rssLink" attributeType="String"/>
+    </entity>
     <elements>
         <element name="News" positionX="-63" positionY="-18" width="128" height="118"/>
+        <element name="Source" positionX="-63" positionY="18" width="128" height="73"/>
     </elements>
 </model>

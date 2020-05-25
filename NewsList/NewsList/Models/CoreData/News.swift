@@ -9,6 +9,4 @@
 import CoreData
 
 @objc(News)
-final class News: NSManagedObject {
-    
-}
+final class News: NSManagedObject {}
