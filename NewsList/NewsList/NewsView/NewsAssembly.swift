@@ -50,7 +50,11 @@ final class NewsAssembly: Swinject.Assembly {
         }
         container.register(NewsListViewModelOutput.self) { r in
             let newsService = r.resolve(NewsServiceProtocol.self)!
-            return NewsListViewModel(newsService: newsService)
+            let sourceService = r.resolve(SourceServiceProtocol.self)!
+            return NewsListViewModel(
+                newsService: newsService,
+                sourceService: sourceService
+            )
         }.inObjectScope(.container).implements(NewsListViewModelInput.self).initCompleted { (r, viewModel) in
             (viewModel as! NewsListViewModel).coordinator = r.resolve(NewsViewCoordinator.self)
         }

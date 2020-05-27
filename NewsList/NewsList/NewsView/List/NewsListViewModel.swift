@@ -9,7 +9,7 @@
 import Foundation
 
 protocol NewsListViewModelInput: AnyObject {
-    var link: String { get set }
+    var source: SourceItem? { get set }
 }
 
 protocol NewsListViewModelOutput {
@@ -28,6 +28,7 @@ protocol NewsListViewModelOutput {
 final class NewsListViewModel {
     // MARK: - Private variables
     private let newsService: NewsServiceProtocol
+    private let sourceService: SourceServiceProtocol
     
     private var list: [NewsItem] = []
     
@@ -35,7 +36,7 @@ final class NewsListViewModel {
     weak var coordinator: NewsViewCoordinator?
 
     // MARK: - Input
-    var link: String = "" {
+    var source: SourceItem? {
         didSet {
             refreshNewsList()
         }
@@ -47,9 +48,12 @@ final class NewsListViewModel {
     var showError: ((String, String) -> Void)?
     
     // MARK: - Initializers
-    init(newsService: NewsServiceProtocol) {
+    init(newsService: NewsServiceProtocol, sourceService: SourceServiceProtocol) {
         self.newsService = newsService
-        refreshNewsList()
+        self.sourceService = sourceService
+        sourceService.getSelectedSource { [weak self] source in
+            self?.source = source
+        }
     }
 }
 
@@ -95,7 +99,7 @@ extension NewsListViewModel: NewsListViewModelOutput {
     }
     
     func refreshNewsList() {
-        newsService.getSortedNewsList(from: link) { [weak self] result in
+        newsService.getSortedNewsList(from: source) { [weak self] result in
             switch result {
             case let .success(newsList):
                 self?.list = newsList

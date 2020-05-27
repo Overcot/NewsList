@@ -17,7 +17,9 @@ enum SourceServiceError: Error {
 
 protocol SourceServiceProtocol {
     func getSourcesList(completion: @escaping ([SourceItem]) -> Void)
+    func markAsSelected(_ source: SourceItem)
     func createNewSource(link: String, completion: @escaping (Result<SourceItem, SourceServiceError>) -> Void)
+    func getSelectedSource(completion: @escaping (SourceItem?) -> Void)
 }
 
 final class SourceService {
@@ -42,6 +44,23 @@ extension SourceService: SourceServiceProtocol {
             })
         }
     }
+    func markAsSelected(_ source: SourceItem) {
+        coreDataService.performBackgroundTask { context in
+            let fetchRequest: NSFetchRequest = Source.fetchRequest()
+            do {
+                let _ = try context.fetch(fetchRequest).forEach { $0.isSelected = false }
+                
+                fetchRequest.predicate = NSPredicate(format: "rssLink == %@", source.link)
+                let result = try context.fetch(fetchRequest)
+                result.first?.isSelected = true
+                
+                if context.hasChanges {
+                    try context.save()
+                }
+            } catch {
+            }
+        }
+    }
     func createNewSource(link: String, completion: @escaping (Result<SourceItem, SourceServiceError>) -> Void) {
         coreDataService.performBackgroundTask { context in
             let fetchRequest: NSFetchRequest = Source.fetchRequest()
@@ -62,6 +81,19 @@ extension SourceService: SourceServiceProtocol {
             } catch {
                 completion(.failure(.errorSaving))
             }
+        }
+    }
+    func getSelectedSource(completion: @escaping (SourceItem?) -> Void) {
+        coreDataService.performBackgroundTask { context in
+            let fetchRequest: NSFetchRequest = Source.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "isSelected == %@", NSNumber(booleanLiteral: true))
+            guard let res = try? context.fetch(fetchRequest), let source = res.first else {
+                return completion(nil)
+            }
+            guard let link = source.rssLink else {
+                return completion(nil)
+            }
+            completion(SourceItem(link: link, isSelected: source.isSelected))
         }
     }
 }

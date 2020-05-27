@@ -80,6 +80,7 @@ extension SelectSourceViewModel: SelectSourceViewModelProtocol {
         guard let source = sources[safe: indexPath.row] else {
             return
         }
+        sourceService.markAsSelected(source)
         coordinator?.userDidSelect(source: source)
     }
     

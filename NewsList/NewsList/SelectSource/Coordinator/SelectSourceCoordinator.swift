@@ -12,18 +12,16 @@ protocol SelectSourceCoordinatorProtocol: AnyObject {
     func userDidSelect(source: SourceItem)
 }
 
-final class SelectSourceCoordinator: BaseCoordinator<String> {
+final class SelectSourceCoordinator: BaseCoordinator<SourceItem> {
     private let splitViewController: UISplitViewController
-    private var completion: ((String) -> Void)?
+    private var completion: ((SourceItem) -> Void)?
     
     // MARK: - Initializers
     init(splitViewController: UISplitViewController) {
         self.splitViewController = splitViewController
     }
-    deinit {
-        print("asd")
-    }
-    override func start(completion: @escaping ((String) -> Void)) {
+
+    override func start(completion: @escaping ((SourceItem) -> Void)) {
         self.completion = completion
         let sourceVC = Assembly.container.resolve(SelectSourceViewController.self)!
         let navController = UINavigationController(rootViewController: sourceVC)
@@ -36,6 +34,6 @@ final class SelectSourceCoordinator: BaseCoordinator<String> {
 extension SelectSourceCoordinator: SelectSourceCoordinatorProtocol {
     func userDidSelect(source: SourceItem) {
         splitViewController.dismiss(animated: true, completion: nil)
-        self.completion?(source.link)
+        self.completion?(source)
     }
 }

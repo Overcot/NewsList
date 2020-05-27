@@ -24,7 +24,7 @@ enum NewsFetchServiceError: Error {
 }
 
 protocol NewsServiceProtocol {
-    func getSortedNewsList(from address: String, completion: @escaping((Result<[NewsItem], NewsFetchServiceError>) -> Void))
+    func getSortedNewsList(from source: SourceItem?, completion: @escaping((Result<[NewsItem], NewsFetchServiceError>) -> Void))
     
     func markNewsAsReaded(_ news: NewsItem)
 }
@@ -87,11 +87,11 @@ extension NewsService {
 // MARK: - Protocol Conformance
 // MARK: - NewsServiceProtocol
 extension NewsService: NewsServiceProtocol {
-    func getSortedNewsList(from address: String, completion: @escaping ((Result<[NewsItem], NewsFetchServiceError>) -> Void)) {
-        guard address.count > 0 else {
+    func getSortedNewsList(from source: SourceItem?, completion: @escaping ((Result<[NewsItem], NewsFetchServiceError>) -> Void)) {
+        guard let source = source, source.link.count > 0 else {
             return completion(.success([]))
         }
-        AF.request(address).response { [weak self] response in
+        AF.request(source.link).response { [weak self] response in
             guard let self = self else {
                 return
             }
@@ -113,6 +113,7 @@ extension NewsService: NewsServiceProtocol {
                         news.link = $0.link
                         news.pubDate = $0.publicationDate
                         news.title = $0.title
+                        news.sourceLink = source.link
                     }
                     do {
                         if context.hasChanges {
@@ -120,6 +121,7 @@ extension NewsService: NewsServiceProtocol {
                         }
                         do {
                             let fetchRequest = NSFetchRequest<News>(entityName: "News")
+                            fetchRequest.predicate = NSPredicate(format: "sourceLink == %@", source.link)
                             fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \News.pubDate, ascending: false)];
                             let result = try context.fetch(fetchRequest)
                             let newsListItems: [NewsItem] = result.compactMap {

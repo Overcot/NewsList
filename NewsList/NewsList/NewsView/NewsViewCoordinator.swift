@@ -29,9 +29,7 @@ final class NewsViewCoordinator: BaseCoordinator<Void> {
         self.listViewControllerBuilder = listViewControllerBuilder
         self.listViewModelBuilder = listViewModelBuilder
     }
-    deinit {
-        print("asd")
-    }
+
     override func start(completion: @escaping ((()) -> Void)) {
         let listViewModel = listViewModelBuilder()
         self.listViewModel = listViewModel
@@ -55,8 +53,8 @@ final class NewsViewCoordinator: BaseCoordinator<Void> {
     
     func selectNewsSource() {
         let selectSourceCoordinator = Assembly.container.resolve(SelectSourceCoordinator.self)!
-        coordinate(to: selectSourceCoordinator) { [weak listViewModel] link in
-            listViewModel?.link = link
+        coordinate(to: selectSourceCoordinator) { [weak listViewModel] source in
+            listViewModel?.source = source
         }
     }
 }
