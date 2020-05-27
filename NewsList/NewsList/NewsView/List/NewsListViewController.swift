@@ -28,10 +28,10 @@ final class NewsListViewController: UIViewController {
         return tableView
     }()
     
-    private var viewModel: NewsListViewModelProtocol!
+    private var viewModel: NewsListViewModelOutput!
     
     // MARK: - Initializers
-    init(viewModel: NewsListViewModelProtocol) {
+    init(viewModel: NewsListViewModelOutput) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

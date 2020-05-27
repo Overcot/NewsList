@@ -8,7 +8,11 @@
 
 import Foundation
 
-protocol NewsListViewModelProtocol {
+protocol NewsListViewModelInput: AnyObject {
+    var link: String { get set }
+}
+
+protocol NewsListViewModelOutput {
     var title: String { get }
     var didUpdateNewsList: (() -> Void)? { get set }
     var didMarkNewsAsReadedAt: ((IndexPath) -> Void)? { get set }
@@ -24,22 +28,27 @@ protocol NewsListViewModelProtocol {
 final class NewsListViewModel {
     // MARK: - Private variables
     private let newsService: NewsServiceProtocol
-    private weak var coordinator: NewsViewCoordinator?
     
     private var list: [NewsItem] = []
+    
+    // MARK: - Public Variables
+    weak var coordinator: NewsViewCoordinator?
+
+    // MARK: - Input
     var link: String = "" {
         didSet {
             refreshNewsList()
         }
     }
+    
+    // MARK: - Output
     var didUpdateNewsList: (() -> Void)?
     var didMarkNewsAsReadedAt: ((IndexPath) -> Void)?
     var showError: ((String, String) -> Void)?
     
     // MARK: - Initializers
-    init(newsService: NewsServiceProtocol, coordinator: NewsViewCoordinator?) {
+    init(newsService: NewsServiceProtocol) {
         self.newsService = newsService
-        self.coordinator = coordinator
         refreshNewsList()
     }
 }
@@ -59,8 +68,11 @@ extension NewsListViewModel {
 }
 
 // MARK: - Protocol Conformance
-// MARK: - NewsListViewModelProtocol
-extension NewsListViewModel: NewsListViewModelProtocol {
+// MARK: - NewsListViewModelInput
+extension NewsListViewModel: NewsListViewModelInput {}
+
+// MARK: - NewsListViewModelOutput
+extension NewsListViewModel: NewsListViewModelOutput {
     var title: String {
         "Новости"
     }

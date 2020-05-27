@@ -8,8 +8,8 @@
 
 import UIKit
 
-protocol SelectSourceCoordinatorProtocol {
-    func userDidSelectSource()
+protocol SelectSourceCoordinatorProtocol: AnyObject {
+    func userDidSelect(source: SourceItem)
 }
 
 final class SelectSourceCoordinator: BaseCoordinator<String> {
@@ -20,10 +20,13 @@ final class SelectSourceCoordinator: BaseCoordinator<String> {
     init(splitViewController: UISplitViewController) {
         self.splitViewController = splitViewController
     }
-
+    deinit {
+        print("asd")
+    }
     override func start(completion: @escaping ((String) -> Void)) {
         self.completion = completion
-        let navController = UINavigationController(rootViewController: SelectSourceViewController(viewModel: SelectSourceViewModel(coordinator: self, sourceService: SourceService(coreDataService: CoreDataService()))))
+        let sourceVC = Assembly.container.resolve(SelectSourceViewController.self)!
+        let navController = UINavigationController(rootViewController: sourceVC)
         splitViewController.present(navController, animated: true, completion: nil)
     }
 }
@@ -31,8 +34,8 @@ final class SelectSourceCoordinator: BaseCoordinator<String> {
 // MARK: - Protocol Conformance
 // MARK: - SelectSourceCoordinatorProtocol
 extension SelectSourceCoordinator: SelectSourceCoordinatorProtocol {
-    func userDidSelectSource() {
+    func userDidSelect(source: SourceItem) {
         splitViewController.dismiss(animated: true, completion: nil)
-        self.completion?("https://www.banki.ru/xml/news.rss")
+        self.completion?(source.link)
     }
 }

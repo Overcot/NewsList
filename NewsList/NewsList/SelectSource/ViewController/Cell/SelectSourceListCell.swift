@@ -9,12 +9,24 @@
 import UIKit
 
 final class SelectSourceListCell: UITableViewCell {
+    // MARK: - Private variables
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.text = "asdasdasd"
         return label
     }()
+    
+    // MARK: - Public Variables
+    var item: SourceItem? {
+        didSet {
+            guard let item = item else {
+                titleLabel.text = ""
+                return
+            }
+            titleLabel.text = item.link
+            accessoryType = (item.isSelected) ? .checkmark : .none
+        }
+    }
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

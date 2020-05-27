@@ -40,6 +40,11 @@
 		CCB4565424799C8B0046FE0A /* NewsViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB4565324799C8B0046FE0A /* NewsViewCoordinator.swift */; };
 		CCB4565624799CC80046FE0A /* SelectSourceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB4565524799CC80046FE0A /* SelectSourceCoordinator.swift */; };
 		CCB45658247AC5330046FE0A /* PlaceholderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB45657247AC5330046FE0A /* PlaceholderViewController.swift */; };
+		CCDBF236247CD4C6001B3CAE /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = CCDBF235247CD4C6001B3CAE /* Swinject */; };
+		CCDBF238247CD518001B3CAE /* NewsAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDBF237247CD518001B3CAE /* NewsAssembly.swift */; };
+		CCDBF23A247CD702001B3CAE /* Assembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDBF239247CD702001B3CAE /* Assembly.swift */; };
+		CCDBF23C247CD80E001B3CAE /* ServicesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDBF23B247CD80E001B3CAE /* ServicesAssembly.swift */; };
+		CCDBF23E247CDD43001B3CAE /* SelectSourceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDBF23D247CDD43001B3CAE /* SelectSourceAssembly.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +100,10 @@
 		CCB4565324799C8B0046FE0A /* NewsViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewCoordinator.swift; sourceTree = "<group>"; };
 		CCB4565524799CC80046FE0A /* SelectSourceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSourceCoordinator.swift; sourceTree = "<group>"; };
 		CCB45657247AC5330046FE0A /* PlaceholderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderViewController.swift; sourceTree = "<group>"; };
+		CCDBF237247CD518001B3CAE /* NewsAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAssembly.swift; sourceTree = "<group>"; };
+		CCDBF239247CD702001B3CAE /* Assembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assembly.swift; sourceTree = "<group>"; };
+		CCDBF23B247CD80E001B3CAE /* ServicesAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesAssembly.swift; sourceTree = "<group>"; };
+		CCDBF23D247CDD43001B3CAE /* SelectSourceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSourceAssembly.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +112,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC1A11CE2478ED170057E71D /* SnapKit in Frameworks */,
+				CCDBF236247CD4C6001B3CAE /* Swinject in Frameworks */,
 				CC65539D247AD08400C64E6A /* SwiftSoup in Frameworks */,
 				CC15832524797E6800165E03 /* SwiftyXMLParser in Frameworks */,
 				CC15832224797AD000165E03 /* Alamofire in Frameworks */,
@@ -226,6 +236,7 @@
 		CC7F4DDD247C377E00D07A3F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				CCDBF23B247CD80E001B3CAE /* ServicesAssembly.swift */,
 				CC9E482F247C4FA0005614ED /* Business */,
 				CC9E482E247C4F9A005614ED /* Core */,
 			);
@@ -314,6 +325,7 @@
 		CC9EC709247C433D0076D205 /* SelectSource */ = {
 			isa = PBXGroup;
 			children = (
+				CCDBF23D247CDD43001B3CAE /* SelectSourceAssembly.swift */,
 				CC9E4830247C4FAB005614ED /* Coordinator */,
 				CC9E4831247C4FAF005614ED /* ViewController */,
 			);
@@ -331,6 +343,7 @@
 		CCB4565A247AC5FF0046FE0A /* NewsView */ = {
 			isa = PBXGroup;
 			children = (
+				CCDBF237247CD518001B3CAE /* NewsAssembly.swift */,
 				CCB4565324799C8B0046FE0A /* NewsViewCoordinator.swift */,
 				CC1583162479753300165E03 /* Split */,
 				CC1A11CF2478ED490057E71D /* List */,
@@ -371,6 +384,7 @@
 			children = (
 				CC1A119924783C810057E71D /* AppDelegate.swift */,
 				CC1A119B24783C810057E71D /* SceneDelegate.swift */,
+				CCDBF239247CD702001B3CAE /* Assembly.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -396,6 +410,7 @@
 				CC15832124797AD000165E03 /* Alamofire */,
 				CC15832424797E6800165E03 /* SwiftyXMLParser */,
 				CC65539C247AD08400C64E6A /* SwiftSoup */,
+				CCDBF235247CD4C6001B3CAE /* Swinject */,
 			);
 			productName = NewsList;
 			productReference = CC1A119624783C810057E71D /* NewsList.app */;
@@ -474,6 +489,7 @@
 				CC15832024797AD000165E03 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				CC15832324797E6800165E03 /* XCRemoteSwiftPackageReference "SwiftyXMLParser" */,
 				CC65539B247AD08400C64E6A /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				CCDBF234247CD4C5001B3CAE /* XCRemoteSwiftPackageReference "Swinject" */,
 			);
 			productRefGroup = CC1A119724783C810057E71D /* Products */;
 			projectDirPath = "";
@@ -528,8 +544,10 @@
 				CC1A119E24783C810057E71D /* NewsListViewController.swift in Sources */,
 				CC265CFA247C45700008558B /* SelectSourceListCell.swift in Sources */,
 				CC265CFC247C45E10008558B /* SelectSourceViewModel.swift in Sources */,
+				CCDBF23E247CDD43001B3CAE /* SelectSourceAssembly.swift in Sources */,
 				CCB4565424799C8B0046FE0A /* NewsViewCoordinator.swift in Sources */,
 				CC265CF8247C45140008558B /* SelectSourceViewController.swift in Sources */,
+				CCDBF23C247CD80E001B3CAE /* ServicesAssembly.swift in Sources */,
 				CC7F4DE0247C37A600D07A3F /* NewsItem.swift in Sources */,
 				CC1A11D32478EDC70057E71D /* NewsListCell.swift in Sources */,
 				CC15831B247975BB00165E03 /* NewsDetailViewController.swift in Sources */,
@@ -538,6 +556,8 @@
 				CC1A11A424783C810057E71D /* NewsList.xcdatamodeld in Sources */,
 				CC1A119C24783C810057E71D /* SceneDelegate.swift in Sources */,
 				CC65539A247AC8D900C64E6A /* NewsDetailViewModel.swift in Sources */,
+				CCDBF238247CD518001B3CAE /* NewsAssembly.swift in Sources */,
+				CCDBF23A247CD702001B3CAE /* Assembly.swift in Sources */,
 				CC65539F247AD43A00C64E6A /* DateFormatter+NewsList.swift in Sources */,
 				CCB4565224799AB80046FE0A /* BaseCoordinator.swift in Sources */,
 				CC7F4DDB247AD94B00D07A3F /* News.swift in Sources */,
@@ -896,6 +916,14 @@
 				minimumVersion = 2.3.2;
 			};
 		};
+		CCDBF234247CD4C5001B3CAE /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -918,6 +946,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CC65539B247AD08400C64E6A /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
+		};
+		CCDBF235247CD4C6001B3CAE /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CCDBF234247CD4C5001B3CAE /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
 		};
 /* End XCSwiftPackageProductDependency section */
 

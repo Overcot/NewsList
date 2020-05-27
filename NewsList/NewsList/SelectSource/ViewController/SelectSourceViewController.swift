@@ -14,6 +14,7 @@ final class SelectSourceViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.allowsMultipleSelection = false
         tableView.register(SelectSourceListCell.self, forCellReuseIdentifier: "com.overcot.SelectSourceViewController.SelectSourceListCell")
         return tableView
     }()
@@ -36,6 +37,7 @@ extension SelectSourceViewController {
         super.viewDidLoad()
         setupViewModel()
         setupSubviews()
+        setupNavigationBar()
     }
 }
 
@@ -49,6 +51,40 @@ extension SelectSourceViewController {
     }
     private func setupViewModel() {
         title = viewModel.title
+        viewModel.updateSourcesList = { [unowned self] in
+            self.tableView.reloadData()
+        }
+        viewModel.presentAlert = { [unowned self] title, message in
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let saveAction = UIAlertAction(title: "Сохранить", style: .default) { [weak self] _ in
+                guard let text = alert.textFields?.first?.text else {
+                    return
+                }
+                self?.viewModel.userDidEnter(newLink: text)
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in }
+
+            alert.addTextField { textField in
+                textField.placeholder = "Введите ссылку rss"
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(saveAction)
+            self.present(alert, animated: true, completion: nil)
+        }
+        viewModel.presentError = { [unowned self] title, message in
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "ОК", style: .default) { _ in }
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewsSource))
+    }
+    
+    @objc
+    private func addNewsSource() {
+        viewModel.addNewsSource()
     }
 }
 
@@ -65,7 +101,7 @@ extension SelectSourceViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         if let cell = cell as? SelectSourceListCell {
-//            cell.item = viewModel.item(forIndexPath: indexPath)
+            cell.item = viewModel.item(forIndexPath: indexPath)
         }
         return cell
     }
@@ -73,6 +109,7 @@ extension SelectSourceViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension SelectSourceViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         viewModel.didSelectRowAt(indexPath: indexPath)
     }
 }
